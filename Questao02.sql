@@ -114,16 +114,27 @@ SHOW TABLES;
 código da disciplinas)*/
 SELECT A.MAT AS Matricula, A.nome FROM Alunos A JOIN Historico H ON H.MAT=A.MAT
 WHERE H.COD_DISC='BD' AND H.nota < 5;
+/*RESULTADO: 2015010101	JOSE DE ALENCAR*/
 
 /*b) Encontre a MAT e calcule a média das notas dos alunos na disciplina de POO
 em 2015.*/
 SELECT A.MAT as Matricula, A.nome, AVG(H.nota) FROM Alunos A JOIN Historico H ON H.MAT=A.MAT
 WHERE H.COD_DISC='POO';
+/*RESULTADO: 2015010103	MARIA JOAQUINA	7.0000*/
 
 /*c) Encontre a MAT e calcule a média das notas dos alunos na disciplina de POO
 em 2015 e que esta média seja superior a 6*/
 SELECT A.MAT AS Matricula, A.nome, H.nota FROM Alunos A JOIN Historico H ON H.MAT=A.MAT
 WHERE H.COD_DISC='POO' GROUP BY H.nota HAVING AVG(H.nota) > 6;
+/*RESULTADO: 2015010103	MARIA JOAQUINA	7*/
 
 /*d) Encontre quantos alunos não são de Natal*/
 SELECT * FROM Alunos WHERE cidade <> 'NATAL';
+/*
+RESULTADO: 3
+2015010102	JOÃO JOSÉ	AVENIDA RUY CARNEIRO	JOÃO PESSOA
+2015010103	MARIA JOAQUINA	RUA CARROSSEL	    RECIFE
+2015010104	MARIA DAS DORES	RUA DAS LADEIRAS	FORTALEZA
+*/
+			
+
