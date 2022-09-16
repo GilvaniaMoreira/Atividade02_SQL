@@ -38,74 +38,77 @@ VALUES
 (7, 3, 3, 15.00, 10, 4),
 (7, 4, 5, 30.00, 10, 1);
 
-# Consulta dos itens vendidos sem desconto
+# a) Consulta dos itens vendidos sem desconto
 select  ID_NF, ID_ITEM, COD_PROD, VALOR_UNIT 
 from vendas 
 where DESCONTO is null;
 
-# Consulta dos itens vendidos com desconto
+# b) Consulta dos itens vendidos com desconto
 select  ID_NF, ID_ITEM, COD_PROD, VALOR_UNIT, VALOR_UNIT-(VALOR_UNIT*(DESCONTO/100)) as VALOR_VENDIDO 
 from vendas 
 where DESCONTO is not null;
 
-# Alterando os valores null para 0
+# c) Alterando os valores null para 0
 SET SQL_SAFE_UPDATES = 0;
 UPDATE vendas
 SET DESCONTO = 0
 WHERE DESCONTO is null;
 
 
-# Consulta de valores vendidos
+# Verificando a alteração de null para 0
+select * from vendas;
+
+# d) Consulta de valores vendidos
 select ID_NF, ID_ITEM, COD_PROD, VALOR_UNIT, DESCONTO,  VALOR_UNIT-(VALOR_UNIT*(DESCONTO/100)) as VALOR_VENDIDO, (QUANTIDADE *VALOR_UNIT) as VALOR_TOTAL 
 from vendas 
-where DESCONTO is not null;
+where DESCONTO > 0;
 
-# Consulta do valor total das NF ordenado do maior para o menor e agrupado por ID_NF
+# e) Consulta do valor total das NF ordenado do maior para o menor e agrupado por ID_NF
 select ID_NF, (QUANTIDADE *VALOR_UNIT) as VALOR_TOTAL
 from vendas 
 group by ID_NF
 order by VALOR_TOTAL desc;
 
-# Consulta do valor vendido das NF ordenado do maior para o menor
-select ID_NF,VALOR_UNIT - (VALOR_UNIT*(DESCONTO/100)) as VALOR_VENDIDO
+# f) Consulta do valor vendido das NF ordenado do maior para o menor
+select ID_NF, VALOR_UNIT - (VALOR_UNIT*(DESCONTO/100)) as VALOR_VENDIDO
 from vendas 
 group by ID_NF
 order by VALOR_VENDIDO desc;
 
-# Consulta do produto mais vendido, agrupado por COD_PROD
+# g) Consulta do produto mais vendido, agrupado por COD_PROD
 select COD_PROD, QUANTIDADE
 from vendas
 group by COD_PROD;
 
-# Consulta das NF vendidas mais de 10 unidades de pelo menos um produto agrupado por ID_NF e COD_PROD
+# h) Consulta das NF vendidas mais de 10 unidades de pelo menos um produto agrupado por ID_NF e COD_PROD
 select  ID_NF, COD_PROD, QUANTIDADE
 from vendas
-where QUANTIDADE=10
-group by ID_NF,COD_PROD
-;
+where QUANTIDADE = 10
+group by ID_NF,COD_PROD;
 
-# Consulta valor total das NF maior que 500, ordenado do maior pro menor e agrupado por ID_NF
+# i) Consulta valor total das NF maior que 500, ordenado do maior pro menor e agrupado por ID_NF
 select ID_NF, (QUANTIDADE * VALOR_UNIT) as VALOR_TOTAL
 from vendas
 group by ID_NF
-HAVING VALOR_TOTAL > 500
+having VALOR_TOTAL > 500
 order by VALOR_TOTAL desc;
 
-# Consulta do valor médio dos descontos por produto agrupado por COD_PROD
-select COD_PROD, avg(DESCONTO)
+# j) Consulta do valor médio dos descontos por produto agrupado por COD_PROD
+select COD_PROD, avg(DESCONTO) as MEDIA_DESCONTO
 from vendas
 group by COD_PROD;
 
 
-
-# Consulta menor, maior e media dos descontos por produto agrupado por COD_PROD
+# k) Consulta menor, maior e media dos descontos por produto agrupado por COD_PROD
 select COD_PROD, min(DESCONTO) as "MENOR", max(DESCONTO) as "MAIOR", avg(DESCONTO) as "MÉDIA"
 from vendas
 group by COD_PROD;
 
-# Consulta NF mais de 3 itens agrupado por ID_NF
+# l) Consulta NF mais de 3 itens agrupado por ID_NF
 select ID_NF, count(QUANTIDADE) AS "QTD_ITENS"
 from vendas
-group by ID_NF;
+group by ID_NF
+having QTD_ITENS > 3;
 
-select * from vendas
+select * from vendas;
+
